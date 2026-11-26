@@ -1,0 +1,15 @@
+
+library(readxl)
+library(lmtest)
+setwd("")
+mydata <- read_excel("wage2.xls", sheet = 1, col_names = FALSE)
+colnames(mydata) <- paste0("X", 1:ncol(mydata))
+
+lm1 <- lm(X17 ~ X5 + X6 + X7 + X9 + X11 + X12 + X10, data = mydata)
+summary(lm1)
+
+lm2 <- lm(X17 ~ X5 + X6 + X7 + X9 + X11 + X12 + X10 + X3, data = mydata)
+summary(lm2)
+
+lm3 <- lm(X17 ~ X5 + X6 + X7 + X9 + X11 + X12 + X10 + X3 + X3 * X5, data = mydata)
+summary(lm3)
