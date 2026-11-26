@@ -1,0 +1,26 @@
+library(readxl)
+library(lmtest)
+library(urca)
+library(tseries)
+library(forecast)
+setwd(" ")
+mydata <- read.table("C9EX3.txt", header = TRUE)
+# mydata <- read.xlsx("C9EX3.xls", 1, header = TRUE)
+
+plot(mydata$y, type = "l", xlab = "Time", ylab = "y", main = "Time Series y")
+acf(mydata$y, lag.max = 20, main = "ACF of y")
+pacf(mydata$y, lag.max = 20, main = "PACF of y")
+
+m1 <- ar(diff(mydata$y), method = "ols")
+print(paste("Selected lag order p:", m1$order))
+
+df_level <- ur.df(mydata$y, type = "drift", lags = m1$order)
+summary(df_level)
+
+
+plot(diff(mydata$y), type = "l", xlab = "Time", ylab = "diff(y)", main = "First Difference of y")
+acf(diff(mydata$y), lag.max = 20, main = "ACF of diff(y)")
+pacf(diff(mydata$y), lag.max = 20, main = "PACF of diff(y)")
+
+df_diff <- ur.df(diff(mydata$y), type = "drift", selectlags = "BIC")
+summary(df_diff)
