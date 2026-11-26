@@ -1,0 +1,2 @@
+arima1 <- arima(diff(mydata$y), order = c(2, 0, 1))
+summary(arima1)
