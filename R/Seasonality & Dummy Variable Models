@@ -1,0 +1,16 @@
+library(readxl)
+library(lmtest)
+setwd("")
+mydata <- read.table("C3EX6.txt", header = TRUE)
+
+
+
+fit_no_constant <- lm(VENTES ~ PUB + t + D1 + D2 + D3 + D4 - 1, data = mydata)
+summary(fit_no_constant)
+
+fit_with_constant <- lm(VENTES ~ PUB + t + D1 + D2 + D3, data = mydata)
+summary(fit_with_constant)
+
+
+f1 <- acf(mydata$VENTES, lag.max = 10)
+print(f1$acf)
