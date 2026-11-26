@@ -1,0 +1,17 @@
+library(Benchmarking)
+
+bcc_in_model <- dea(X, Y, RTS = "vrs", ORIENTATION = "in")
+
+pte_scores <- eff(bcc_in_model)
+print(pte_scores)
+
+crs_scores <- eff(ccr_in_model)
+
+scale_efficiency <- crs_scores / pte_scores
+print(scale_efficiency)
+
+lambda_matrix <- lambda(bcc_in_model)
+sum_lambdas <- rowSums(lambda_matrix)
+returns_to_scale <- ifelse(sum_lambdas == 1, "CRS", 
+                    ifelse(sum_lambdas < 1, "DRS", "IRS"))
+print(returns_to_scale)
