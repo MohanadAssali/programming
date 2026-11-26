@@ -1,0 +1,47 @@
+library(urca)
+setwd("")
+
+crsp_data <- read.table("returns-CRSP-portfolio-01-1967-to-12-2009.txt", header = TRUE)
+returns_series <- crsp_data$returns
+
+f1 <- acf(returns_series, lag.max = 24, main = "ACF of CRSP Returns")
+f1$acf
+
+T_obs <- length(returns_series)
+t_stat_lag12 <- f1$acf[13] * sqrt(T_obs) # Index 13 corresponds to lag 12 in R
+print(paste("t-statistic for Lag 12:", round(t_stat_lag12, 4)))
+
+Box.test(returns_series, lag = 5, type = "Box-Pierce")
+Box.test(returns_series, lag = 5, type = "Ljung-Box")
+
+
+
+pacf_data <- read_excel("C4EX1.xls", sheet = 1, col_names = TRUE)
+
+fit_y <- lm(Y ~ X2, data = pacf_data)
+fit_x1 <- lm(X1 ~ X2, data = pacf_data)
+pcorr_val1 <- cor(resid(fit_y), resid(fit_x1))
+print(paste("Manual Partial Correlation (Y, X1 | X2):", round(pcorr_val1, 4)))
+
+fit_y2 <- lm(Y ~ X1 + X2, data = pacf_data)
+fit_x3 <- lm(X3 ~ X1 + X2, data = pacf_data)
+pcorr_val2 <- cor(resid(fit_y2), resid(fit_x3))
+print(paste("Manual Partial Correlation (Y, X3 | X1, X2):", round(pcorr_val2, 4)))
+
+pacf(pacf_data$Y, lag.max = 10, main = "Partial Autocorrelation Function")
+
+
+
+gdp_raw <- read.table("q-gdp4708.txt", header = TRUE)
+gdp_log <- log(gdp_raw[, 4])   # Log GDP series
+gdp_diff <- diff(gdp_log)      # First difference series
+
+ar_model <- ar(gdp_diff, method = "ols")
+optimal_lags <- ar_model$order
+print(paste("Selected Optimal Lag p:", optimal_lags))
+
+adf_level <- ur.df(gdp_log, type = "trend", lags = optimal_lags)
+summary(adf_level)
+
+adf_diff <- ur.df(gdp_diff, type = "trend", selectlags = "BIC")
+summary(adf_diff)
