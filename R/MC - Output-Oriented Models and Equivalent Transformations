@@ -1,0 +1,15 @@
+library(Benchmarking)
+
+ccr_out_model <- dea(X, Y, RTS = "crs", ORIENTATION = "out")
+
+phi_scores <- eff(ccr_out_model)
+print(phi_scores)
+
+implied_theta <- 1 / phi_scores
+print(implied_theta)
+
+peer_weights_out <- lambda(ccr_out_model)
+print(peer_weights_out)
+
+slacks_out <- slack(X, Y, ccr_out_model)
+print(slacks_out$slack)
