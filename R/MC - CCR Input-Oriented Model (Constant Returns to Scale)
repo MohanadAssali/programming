@@ -1,0 +1,16 @@
+library(Benchmarking)
+library(readxl)
+
+X <- as.matrix(mydata[, c("Staff_Strength", "Economic_Depreciation")])
+Y <- as.matrix(mydata[, c("Counter_Operations")])
+
+ccr_model <- dea(X, Y, RTS = "crs", ORIENTATION = "in")
+
+eff_scores <- eff(ccr_model)
+print(eff_scores)
+
+peer_weights <- lambda(ccr_model)
+print(peer_weights)
+
+slacks_res <- slack(X, Y, ccr_model)
+print(slacks_res$slack)
