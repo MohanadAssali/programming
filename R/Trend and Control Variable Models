@@ -1,0 +1,13 @@
+library(readxl)
+library(lmtest)
+setwd(" ")
+mydata_inv <- read_excel("hseinv.xls", sheet = 1, col_names = FALSE)
+colnames(mydata_inv) <- paste0("X", 1:ncol(mydata_inv))
+plot(mydata_inv$X1, mydata_inv$X10, type = "l", col = "red", ylim = c(-1, 0), xlab = "Time", ylab = "Log Investment / Price")
+lines(mydata_inv$X1, mydata_inv$X7, col = "green")
+
+lm_inv1 <- lm(X10 ~ X7, data = mydata_inv)
+summary(lm_inv1)
+
+lm_inv2 <- lm(X10 ~ X7 + X8, data = mydata_inv)
+summary(lm_inv2)
