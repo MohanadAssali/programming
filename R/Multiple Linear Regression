@@ -1,0 +1,12 @@
+library(readxl)
+setwd("")
+mydata <- read_excel("wage2.xls", sheet = 1, col_names = FALSE) 
+mult_model <- lm(mydata$...17 ~ mydata$...5 + mydata$...6 + mydata$...7 + mydata$...9 + mydata$...11 + mydata$...12 + mydata$...10)
+summary(mult_model)
+n <- nrow(mydata)
+k <- 8 
+df <- n - k
+residuals_sq_sum <- sum(resid(mult_model)^2)
+residual_std_error <- sqrt(residuals_sq_sum / df)
+print(paste("Degrees of Freedom:", df))
+print(paste("Residual Standard Error:", residual_std_error)) 
