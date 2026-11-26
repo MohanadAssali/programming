@@ -11,3 +11,12 @@ summary(lm_inv1)
 
 lm_inv2 <- lm(X10 ~ X7 + X8, data = mydata_inv)
 summary(lm_inv2)
+
+mydata_wge <- read_excel("prminwge.xls", sheet = 1, col_names = FALSE)
+colnames(mydata_wge) <- paste0("X", 1:ncol(mydata_wge))
+
+lm_wge_notrend <- lm(X21 ~ X24 + X18, data = mydata_wge)
+summary(lm_wge_notrend)
+
+lm_wge_trend <- lm(X21 ~ X24 + X18 + X14, data = mydata_wge)
+summary(lm_wge_trend)
