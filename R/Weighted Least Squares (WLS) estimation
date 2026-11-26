@@ -1,0 +1,19 @@
+library(readxl)
+library(sandwich) 
+setwd("")
+mydata <- read_excel("401ksubs.xls", sheet = 1, col_names = FALSE)
+colnames(mydata) <- paste0("X", 1:ncol(mydata))
+
+mydata1 <- subset(mydata, mydata$X6 == 1)
+
+lm1 <- lm(X7 ~ X2, data = mydata1)
+summary(lm1)
+
+NeweyWest(lm1)[1, 1]^(1/2)
+
+WV7 <- mydata1$X7 / sqrt(mydata1$X2)
+WV2 <- mydata1$X2 / sqrt(mydata1$X2)
+Constant_term <- 1 / sqrt(mydata1$X2)
+
+lm3 <- lm(WV7 ~ Constant_term + WV2 - 1)
+summary(lm3)
