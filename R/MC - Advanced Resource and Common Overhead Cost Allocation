@@ -1,0 +1,18 @@
+library(Benchmarking)
+
+alloc_model <- dea(X, Y, RTS = "crs", ORIENTATION = "out")
+efficient_peers <- peer(alloc_model)
+print(efficient_peers)
+
+allocation_weights <- lambda(alloc_model)
+
+allocation_slacks <- slack(X, Y, alloc_model)
+
+# Total common overhead pool to allocate (e.g., Central Office Rent & Salaries = 500,000 €)
+total_overhead <- 500000 
+
+normalized_weights <- sweep(allocation_weights, 2, colSums(allocation_weights), FUN = "/")
+allocated_costs <- total_overhead * colMeans(normalized_weights)
+
+print("--- Final Allocated Common Costs per DMU ---")
+print(allocated_costs)
